@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FELINA TECHNOLOGY - Complete Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* NAVBAR */
+    header {
+      background: linear-gradient(135deg, #1605b3 0%, #061bdf 100%);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    /* TAB NAVIGATION */
+    .tab-container {
+      background: #061bdf;
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+      list-style: none;
+    }
+
+    .tabs li {
+      margin: 0;
+    }
+
+    .tabs button {
+      background: transparent;
+      color: #fff;
+      border: none;
+      padding: 15px 20px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      transition: 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tabs button:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .tabs button.active {
+      border-bottom-color: #ffd700;
+      color: #ffd700;
+    }
+
+    /* CONTENT SECTIONS */
+    .content {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      animation: fadeIn 0.3s;
+    }
+
+    .content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* HOME/HERO SECTION */
+    .hero {
+      background: linear-gradient(135deg, #1605b3 0%, #061bdf 100%);
+      color: #fff;
+      padding: 80px 20px;
+      text-align: center;
+      border-radius: 10px;
+      margin-bottom: 40px;
+    }
+
+    .hero h2 {
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: #ffd700;
+      color: #1605b3;
+      padding: 12px 30px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+      border: none;
+      font-size: 15px;
+    }
+
+    .cta-button:hover {
+      background: #fff;
+      transform: scale(1.05);
+    }
+
+    .highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .highlight-card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .highlight-card h3 {
+      color: #1605b3;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    /* ABOUT SECTION */
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .about-card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-card h3 {
+      color: #1605b3;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .team-member {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .member-avatar {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .team-member h4 {
+      color: #1605b3;
+      font-size: 16px;
+      margin-bottom: 3px;
+    }
+
+    .team-member .role {
+      color: #ffd700;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .team-member p {
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    /* SERVICES SECTION */
+    .filter-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .filter-btn {
+      background: #fff;
+      border: 2px solid #1605b3;
+      color: #1605b3;
+      padding: 10px 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+      font-size: 13px;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: #1605b3;
+      color: #fff;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .service-card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .service-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .service-card h3 {
+      color: #1605b3;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .service-features {
+      list-style: none;
+      margin: 15px 0;
+      font-size: 13px;
+    }
+
+    .service-features li {
+      padding: 5px 0;
+      color: #666;
+    }
+
+    .service-btn {
+      width: 100%;
+      background: #1605b3;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 15px;
+      transition: 0.3s;
+    }
+
+    .service-btn:hover {
+      background: #061bdf;
+    }
+
+    /* PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .pricing-card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .pricing-card.featured {
+      background: linear-gradient(135deg, #1605b3 0%, #061bdf 100%);
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .pricing-card h3 {
+      color: #1605b3;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .pricing-card.featured h3 {
+      color: #ffd700;
+    }
+
+    .price {
+      font-size: 26px;
+      font-weight: bold;
+      color: #ffd700;
+      margin: 15px 0;
+    }
+
+    .pricing-card ul {
+      list-style: none;
+      margin: 20px 0;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .pricing-card li {
+      padding: 8px 0;
+      color: #666;
+    }
+
+    .pricing-card.featured li {
+      color: #f0f0f0;
+    }
+
+    /* CONTACT SECTION */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .info-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .info-icon {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .info-card h4 {
+      color: #1605b3;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .info-card p {
+      font-size: 13px;
+    }
+
+    .info-card a {
+      color: #ffd700;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* CONTACT FORM */
+    .contact-form {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: #333;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 13px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #1605b3;
+      box-shadow: 0 0 5px rgba(22, 5, 179, 0.3);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: #1605b3;
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #061bdf;
+    }
+
+    .form-message {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      display: none;
+      font-size: 13px;
+    }
+
+    .form-message.success {
+      background: #d4edda;
+      color: #155724;
+      display: block;
+    }
+
+    /* DASHBOARD SECTION */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .dashboard-card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-card h3 {
+      color: #1605b3;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .status-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .online {
+      background: #16a34a;
+    }
+
+    .offline {
+      background: #ef4444;
+    }
+
+    .link-output {
+      word-break: break-all;
+      background: #f3f4f6;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px dashed #e8eaf6;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .dashboard-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .dashboard-btn {
+      background: #1605b3;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .dashboard-btn:hover {
+      background: #061bdf;
+    }
+
+    .dashboard-btn.secondary {
+      background: transparent;
+      border: 1px solid #1605b3;
+      color: #1605b3;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #111;
+      color: #ccc;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 40px;
+    }
+
+    footer p {
+      font-size: 14px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .tabs {
+        flex-direction: column;
+      }
+
+      .tabs button {
+        border-bottom: 1px solid #333;
+        border-right: 3px solid transparent;
+      }
+
+      .tabs button.active {
+        border-right-color: #ffd700;
+        border-bottom-color: transparent;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pricing-card.featured {
+        transform: scale(1);
+      }
+
+      .hero h2 {
+        font-size: 28px;
+      }
+
+      .filter-buttons {
+        flex-direction: column;
+      }
+
+      .filter-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1>FELINA TECHNOLOGY</h1>
+    <p>Innovating ICT, AI & Smart Digital Solutions</p>
+  </header>
+
+  <!-- TAB NAVIGATION -->
+  <div class="tab-container">
+    <ul class="tabs">
+      <li><button class="tab-btn active" data-tab="home">Home</button></li>
+      <li><button class="tab-btn" data-tab="about">About</button></li>
+      <li><button class="tab-btn" data-tab="services">Services</button></li>
+      <li><button class="tab-btn" data-tab="contact">Contact</button></li>
+      <li><button class="tab-btn" data-tab="dashboard">Dashboard</button></li>
+    </ul>
+  </div>
+
+  <!-- HOME SECTION -->
+  <div id="home" class="content active">
+    <div class="hero">
+      <h2>Welcome to FELINA TECHNOLOGY</h2>
+      <p>Your trusted partner in digital innovation and transformation</p>
+      <button class="cta-button" onclick="switchTab('services')">Explore Our Services</button>
+    </div>
+
+    <div class="highlights">
+      <div class="highlight-card">
+        <h3>🚀 Innovation</h3>
+        <p>Cutting-edge technology solutions tailored to your business needs.</p>
+      </div>
+      <div class="highlight-card">
+        <h3>🛡️ Security</h3>
+        <p>Enterprise-grade cybersecurity & data protection.</p>
+      </div>
+      <div class="highlight-card">
+        <h3>💼 Support</h3>
+        <p>24/7 ICT support & maintenance services.</p>
+      </div>
+      <div class="highlight-card">
+        <h3>🎨 Design</h3>
+        <p>Creative branding & digital marketing expertise.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT SECTION -->
+  <div id="about" class="content">
+    <h2 style="color: #1605b3; margin-bottom: 20px;">About FELINA TECHNOLOGY</h2>
+    <p style="font-size: 16px; margin-bottom: 20px;">
+      FELINA TECHNOLOGY is a leading ICT and AI-driven solutions provider based in Nairobi, Kenya. 
+      We specialize in software development, automation, cybersecurity, digital branding, and advanced computing support.
+    </p>
+
+    <div class="about-grid">
+      <div class="about-card">
+        <h3>🎯 Our Mission</h3>
+        <p>To deliver cutting-edge ICT and AI solutions that transform businesses and drive digital excellence.</p>
+      </div>
+      <div class="about-card">
+        <h3>👁️ Our Vision</h3>
+        <p>To be the most trusted technology partner for businesses seeking innovation and growth.</p>
+      </div>
+      <div class="about-card">
+        <h3>💎 Our Values</h3>
+        <p>Innovation, Integrity, Excellence, and Customer-Centric approach guide every solution we deliver.</p>
+      </div>
+    </div>
+
+    <h3 style="color: #1605b3; margin-top: 30px; margin-bottom: 20px;">Meet Our Team</h3>
+    <div class="team-grid">
+      <div class="team-member">
+        <div class="member-avatar">👨‍💼</div>
+        <h4>FELIX JUMA</h4>
+        <p class="role">CEO & Founder</p>
+        <p>8+ years in ICT & digital transformation</p>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar">👩‍💻</div>
+        <h4>EUNICE ADHIAMBO</h4>
+        <p class="role">Lead Developer</p>
+        <p>Expert in web & mobile development</p>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar">👨‍🔧</div>
+        <h4>DR. DOWLING </h4>
+        <p class="role">SPONSOR</p>
+        <p>System administration & cybersecurity</p>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar">👩‍🎨</div>
+        <h4>ALEX ODHIAMBO</h4>
+        <p class="role">MANAGER FELINA</p>
+        <p>Innovator and AI Solution Assistance</p>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar">👩‍🎨</div>
+        <h4>JACKLYNE ANYANGO</h4>
+        <p class="role">Creative Director</p>
+        <p>Brand design & digital marketing</p>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar">👨‍🔧</div>
+        <h4>CHRISTOPHER OTIENO </h4>
+        <p class="role">TEAM MEMEBER</p>
+        <p>Maintenance and Repair</p>
+      </div>
+    <div class="team-member">
+        <div class="member-avatar">👨‍🔧</div>
+        <h4>KEVIN OUMA</h4>
+        <p class="role">ASSS. DIRECTOR</p>
+        <p>Maintenance and Repair</p>
+      </div>
+    <div class="team-member">
+        <div class="member-avatar">👨‍🔧</div>
+        <h4>BYRONE ODUOR </h4>
+        <p class="role">SPONSOR</p>
+        <p>System administration & cybersecurity</p>
+      </div>
+    <div class="team-member">
+        <div class="member-avatar">👩‍🎨</div>
+        <h4>CARREN ANYANGO</h4>
+        <p class="role">Creative Director</p>
+        <p>Brand design & digital marketing</p>
+    </div>
+    </div>
+    <div class="about-grid" style="margin-top: 30px;">
+      <div style="grid-column: 1/-1; text-align: center;">
+        <h3 style="color: #1605b3; margin-bottom: 20px;">Our Achievements</h3>
+      </div>
+      <div class="about-card" style="text-align: center; background: linear-gradient(135deg, #1605b3 0%, #061bdf 100%); color: #fff;">
+        <h3 style="color: #ffd700; font-size: 32px;">50+</h3>
+        <p>Projects Completed</p>
+      </div>
+      <div class="about-card" style="text-align: center; background: linear-gradient(135deg, #1605b3 0%, #061bdf 100%); color: #fff;">
+        <h3 style="color: #ffd700; font-size: 32px;">35+</h3>
+        <p>Happy Clients</p>
+      </div>
+      <div class="about-card" style="text-align: center; background: linear-gradient(135deg, #1605b3 0%, #061bdf 100%); color: #fff;">
+        <h3 style="color: #ffd700; font-size: 32px;">12+</h3>
+        <p>Team Members</p>
+      </div>
+      <div class="about-card" style="text-align: center; background: linear-gradient(135deg, #1605b3 0%, #061bdf 100%); color: #fff;">
+        <h3 style="color: #ffd700; font-size: 32px;">99%</h3>
+        <p>Client Satisfaction</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES SECTION -->
+  <div id="services" class="content">
+    <h2 style="color: #1605b3; margin-bottom: 20px;">Our Services</h2>
+
+    <div class="filter-buttons">
+      <button class="filter-btn active" onclick="filterServices('all')">All Services</button>
+      <button class="filter-btn" onclick="filterServices('development')">Development</button>
+      <button class="filter-btn" onclick="filterServices('support')">Support</button>
+      <button class="filter-btn" onclick="filterServices('security')">Security</button>
+      <button class="filter-btn" onclick="filterServices('branding')">Branding</button>
+    </div>
+
+    <div class="services-grid" id="servicesGrid">
+      <div class="service-card" data-category="development">
+        <div class="service-icon">🌐</div>
+        <h3>Web & Software Development</h3>
+        <p>Custom systems, websites, dashboards, and enterprise applications tailored to your needs.</p>
+        <ul class="service-features">
+          <li>✓ Responsive Web Design</li>
+          <li>✓ Custom Web Applications</li>
+          <li>✓ Mobile App Development</li>
+          <li>✓ Enterprise Software Solutions</li>
+        </ul>
+        <button class="service-btn">Learn More</button>
+      </div>
+
+      <div class="service-card" data-category="development">
+        <div class="service-icon">🤖</div>
+        <h3>AI & Automation</h3>
+        <p>AI chatbots, automated workflows, and smart decision systems to streamline your operations.</p>
+        <ul class="service-features">
+          <li>✓ AI Chatbots</li>
+          <li>✓ Workflow Automation</li>
+          <li>✓ Machine Learning Solutions</li>
+          <li>✓ Data Analytics</li>
+        </ul>
+        <button class="service-btn">Learn More</button>
+      </div>
+
+      <div class="service-card" data-category="support">
+        <div class="service-icon">🛠️</div>
+        <h3>ICT Support & Maintenance</h3>
+        <p>PC repair, optimization, OS installation, troubleshooting, and networking solutions.</p>
+        <ul class="service-features">
+          <li>✓ Hardware Repair</li>
+          <li>✓ System Optimization</li>
+          <li>✓ Network Setup</li>
+          <li>✓ 24/7 Technical Support</li>
+        </ul>
+        <button class="service-btn">Learn More</button>
+      </div>
+
+      <div class="service-card" data-category="security">
+        <div class="service-icon">🔒</div>
+        <h3>Cybersecurity & Data Protection</h3>
+        <p>System hardening, secure backups, and digital protection strategies to safeguard your data.</p>
+        <ul class="service-features">
+          <li>✓ System Hardening</li>
+          <li>✓ Data Encryption</li>
+          <li>✓ Backup Solutions</li>
+          <li>✓ Threat Detection</li>
+        </ul>
+        <button class="service-btn">Learn More</button>
+      </div>
+
+      <div class="service-card" data-category="branding">
+        <div class="service-icon">🎨</div>
+        <h3>Branding & Digital Marketing</h3>
+        <p>Design, social media management, ad campaigns, and SEO optimization for your brand.</p>
+        <ul class="service-features">
+          <li>✓ Logo & Brand Design</li>
+          <li>✓ Social Media Management</li>
+          <li>✓ SEO Optimization</li>
+          <li>✓ Digital Ad Campaigns</li>
+        </ul>
+        <button class="service-btn">Learn More</button>
+      </div>
+
+      <div class="service-card" data-category="support">
+        <div class="service-icon">☁️</div>
+        <h3>Cloud Solutions & Infrastructure</h3>
+        <p>Cloud migration, server management, and scalable infrastructure for growing businesses.</p>
+        <ul class="service-features">
+          <li>✓ Cloud Migration</li>
+          <li>✓ Server Management</li>
+          <li>✓ Disaster Recovery</li>
+          <li>✓ Infrastructure Scaling</li>
+        </ul>
+        <button class="service-btn">Learn More</button>
+      </div>
+    </div>
+
+    <h3 style="color: #1605b3; margin-top: 40px; margin-bottom: 20px;">Service Packages</h3>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <h3>Starter</h3>
+        <div class="price">KES 5,000/mon</div>
+        <ul>
+          <li>✓ Basic IT Support</li>
+          <li>✓ Email Support</li>
+          <li>✓ Monthly Maintenance</li>
+          <li>✓ Computer Packages</li>
+        </ul>
+        <button class="service-btn">Get Started</button>
+      </div>
+      <div class="pricing-card featured">
+        <h3>Professional</h3>
+        <div class="price">KES 15,000/mon</div>
+        <ul>
+          <li>✓ Priority Support</li>
+          <li>✓ Custom Development</li>
+          <li>✓ Security Services</li>
+          <li>✓ Weekly Reports</li>
+        </ul>
+        <button class="service-btn">Get Started</button>
+      </div>
+      <div class="pricing-card">
+        <h3>Enterprise</h3>
+        <div class="price">Custom Quote</div>
+        <ul>
+          <li>✓ 24/7 Dedicated Support</li>
+          <li>✓ Full Custom Solutions</li>
+          <li>✓ Advanced Security</li>
+          <li>✓ Consulting Services</li>
+        </ul>
+        <button class="service-btn">Contact Us</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT SECTION -->
+  <div id="contact" class="content">
+    <h2 style="color: #1605b3; margin-bottom: 20px;">Contact Us</h2>
+
+    <div class="contact-grid">
+      <div>
+        <h3 style="color: #1605b3; margin-bottom: 20px;">Get In Touch</h3>
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-icon">📧</div>
+            <h4>Email</h4>
+            <p><a href="mailto:felinatechnology@gmail.com">felinatechnology@gmail.com</a></p>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">📞</div>
+            <h4>Phone</h4>
+            <p><a href="tel:+254718317282">+254 718317282</a></p>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">📍</div>
+            <h4>Location</h4>
+            <p>Siaya, Kenya</p>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">⏰</div>
+            <h4>Hours</h4>
+            <p>Mon-Fri: 9:00 AM - 6:00 PM</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="color: #1605b3; margin-bottom: 20px;">Send us a Message</h3>
+        <form id="contactForm" class="contact-form" onsubmit="handleContactForm(event)">
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" />
+          </div>
+
+          <div class="form-group">
+            <label for="service">Service Interested In *</label>
+            <select id="service" name="service" required>
+              <option value="">Select a service</option>
+              <option value="development">Web & Software Development</option>
+              <option value="ai">AI & Automation</option>
+              <option value="support">ICT Support & Maintenance</option>
+              <option value="security">Cybersecurity & Data Protection</option>
+              <option value="branding">Branding & Digital Marketing</option>
+              <option value="cloud">Cloud Solutions</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message *</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">Send Message</button>
+          <div id="formMessage" class="form-message"></div>
+        </form>
+      </div>
+    </div>
+
+    <h3 style="color: #1605b3; margin-top: 40px; margin-bottom: 20px;">Frequently Asked Questions</h3>
+    <div class="about-grid">
+      <div class="about-card">
+        <h4>What is your turnaround time for projects?</h4>
+        <p>Projects vary in scope. We provide detailed timelines after initial consultation and assessment.</p>
+      </div>
+      <div class="about-card">
+        <h4>Do you offer support after delivery?</h4>
+        <p>Yes! We provide post-delivery support and maintenance packages for all our solutions.</p>
+      </div>
+      <div class="about-card">
+        <h4>Can you work with remote clients?</h4>
+        <p>Absolutely! We work with clients globally via video calls and online collaboration tools.</p>
+      </div>
+      <div class="about-card">
+        <h4>What technologies do you use?</h4>
+        <p>We use modern tech stacks including React, Node.js, Python, AWS, and Azure.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD SECTION -->
+  <div id="dashboard" class="content">
+    <h2 style="color: #1605b3; margin-bottom: 20px;">Secure Dashboard</h2>
+
+    <div class="dashboard-grid">
+      <div class="dashboard-card">
+        <h3>Site Status</h3>
+        <p>Shows whether this instance is reachable from the network.</p>
+        <div class="status-row">
+          <span class="status-dot offline"></span>
+          <strong>Local (not publicly accessible)</strong>
+        </div>
+        <p style="font-size: 12px; color: #666; margin-top: 10px;">To make the site accessible online: deploy to a hosting provider and point DNS for www.felinatechnology.com to that host. Enable HTTPS.</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>Generate Shareable Link</h3>
+        <p>Create a short share link for emails or messages.</p>
+        <div class="form-group">
+          <label for="domainInput" style="font-size: 12px;">Domain</label>
+          <input type="text" id="domainInput" value="https://www.felinatechnology.com" />
+        </div>
+        <div class="form-group">
+          <label for="pathInput" style="font-size: 12px;">Path or Page</label>
+          <input type="text" id="pathInput" value="/" />
+        </div>
+        <div class="dashboard-buttons">
+          <button class="dashboard-btn" onclick="generateLink()">Generate Link</button>
+          <button class="dashboard-btn secondary" onclick="copyLink()">Copy</button>
+          <button class="dashboard-btn secondary" onclick="emailLink()">Email</button>
+        </div>
+        <div id="linkOutput" class="link-output">No link yet — click Generate Link</div>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>Options & Token</h3>
+        <p>Include a token for tracking or access management.</p>
+        <div class="form-group">
+          <label for="tokenType" style="font-size: 12px;">Token Type</label>
+          <select id="tokenType">
+            <option value="none">None</option>
+            <option value="random">Random short token</option>
+            <option value="timestamp">Timestamp token</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="expireInput" style="font-size: 12px;">Expire (hours)</label>
+          <input type="text" id="expireInput" placeholder="e.g. 24" />
+        </div>
+        <p style="font-size: 11px; color: #666;">For secure expiring links, implement server-side storage.</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>Quick Actions</h3>
+        <p>Test reachability and manage your share links.</p>
+        <div class="dashboard-buttons">
+          <button class="dashboard-btn" onclick="checkReachability()">Check Reachability</button>
+          <button class="dashboard-btn secondary" onclick="resetDashboard()">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #fff; padding: 20px; border-radius: 10px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
+      <p style="color: #666; font-size: 13px;">
+        <strong>Last Updated:</strong> <span id="lastUpdated">—</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 FELINA TECHNOLOGY. All Rights Reserved.</p>
+    <p style="font-size: 12px; margin-top: 10px;">Email: felinatechnology@gmail.com | Phone: +254 718317282 | Nairobi, Kenya</p>
+  </footer>
+
+  <script>
+    // TAB SWITCHING
+    function switchTab(tabName) {
+      const contents = document.querySelectorAll('.content');
+      const buttons = document.querySelectorAll('.tab-btn');
+
+      contents.forEach(content => content.classList.remove('active'));
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      document.getElementById(tabName).classList.add('active');
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+      window.scrollTo(0, 0);
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
+    });
+
+    // SERVICE FILTERING
+    function filterServices(category) {
+      const cards = document.querySelectorAll('.service-card');
+      const btns = document.querySelectorAll('.filter-btn');
+
+      btns.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // CONTACT FORM
+    function handleContactForm(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const message = document.getElementById('message').value;
+      const formMessage = document.getElementById('formMessage');
+
+      if (name && email && message) {
+        formMessage.textContent = 'Thank you! We will get back to you soon.';
+        formMessage.classList.add('success');
+        document.getElementById('contactForm').reset();
+
+        setTimeout(() => formMessage.classList.remove('success'), 5000);
+      } else {
+        formMessage.textContent = 'Please fill all required fields.';
+        formMessage.classList.add('error');
+      }
+    }
+
+    // DASHBOARD FUNCTIONS
+    function generateLink() {
+      const domain = document.getElementById('domainInput').value.trim();
+      const path = document.getElementById('pathInput').value.trim() || '/';
+      const tokenType = document.getElementById('tokenType').value;
+      const expire = document.getElementById('expireInput').value.trim();
+
+      if (!domain) return alert('Please enter a domain.');
+
+      let link = domain.replace(/\/$/, '') + (path.startsWith('/') ? path : '/' + path);
+
+      if (tokenType !== 'none') {
+        const token = tokenType === 'timestamp' ? Date.now().toString(36) : Math.random().toString(36).slice(2, 10);
+        link += '?t=' + token;
+        if (expire) link += '&exp=' + expire;
+      }
+
+      document.getElementById('linkOutput').textContent = link;
+      document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+    }
+
+    function copyLink() {
+      const link = document.getElementById('linkOutput').textContent;
+      if (link.startsWith('No link')) return alert('Generate a link first.');
+      navigator.clipboard.writeText(link);
+      alert('Link copied to clipboard!');
+    }
+
+    function emailLink() {
+      const link = document.getElementById('linkOutput').textContent;
+      if (link.startsWith('No link')) return alert('Generate a link first.');
+      const subject = encodeURIComponent('Access to Felina Technology');
+      const body = encodeURIComponent(`Please access Felina Technology using this link:\n\n${link}`);
+      window.location.href = `mailto:support@felinatechnology.com?subject=${subject}&body=${body}`;
+    }
+
+    function checkReachability() {
+      const domain = document.getElementById('domainInput').value.trim();
+      alert('Domain check: ' + (domain ? 'Ready to test (would need server-side validation)' : 'Please enter a domain first.'));
+    }
+
+    function resetDashboard() {
+      document.getElementById('domainInput').value = 'https://www.felinatechnology.com';
+      document.getElementById('pathInput').value = '/';
+      document.getElementById('tokenType').value = 'none';
+      document.getElementById('expireInput').value = '';
+      document.getElementById('linkOutput').textContent = 'No link yet — click Generate Link';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!-- ...existing code... -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Felina Technology — Dashboard<br>#CEO</div></title>
+    <style>
+        :root{--bg:#f6f7fb;--card:#fff;--accent:#6c63ff;--muted:#6b7280}
+        body{font-family:Inter,Segoe UI,system-ui,Arial;background:var(--bg);margin:0;color:#111}
+        .container{max-width:1100px;margin:32px auto;padding:20px}
+        header{display:flex;align-items:center;gap:16px}
+        .logo{font-weight:700;color:var(--accent);font-size:20px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:18px}
+        .card{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(18,23,40,0.06)}
+        h1{margin:0;font-size:18px}
+        p.small{color:var(--muted);margin:8px 0 12px;font-size:13px}
+        .muted{color:var(--muted);font-size:13px}
+        label{display:block;font-size:13px;margin-bottom:6px}
+        input[type="text"],select{width:100%;padding:10px;border:1px solid #e6e8f0;border-radius:8px;font-size:14px}
+        button{background:var(--accent);color:#fff;border:0;padding:10px 12px;border-radius:8px;cursor:pointer}
+        .btn-ghost{background:transparent;color:var(--accent);border:1px solid #e6e8ff}
+        .row{display:flex;gap:8px;align-items:center}
+        .link-output{word-break:break-all;background:#f3f4f6;padding:10px;border-radius:8px;border:1px dashed #e8eaf6}
+        footer{margin-top:18px;color:var(--muted);font-size:13px}
+        .status-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle}
+        .online{background:#16a34a}
+        .offline{background:#ef4444}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Felina Technology</div>
+            <div style="margin-left:auto" class="muted">Dashboard — quick publish & share</div>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <h1>Site status</h1>
+                <p class="small">Shows whether this instance is reachable from the network and gives quick publish notes.</p>
+                <div id="statusRow" class="row" style="margin-top:6px">
+                    <span id="statusDot" class="status-dot offline" aria-hidden="true"></span>
+                    <strong id="statusText">Local (not publicly accessible)</strong>
+                </div>
+                <p class="muted" style="margin-top:12px">To make the site accessible on the public internet:
+                deploy to a hosting provider and point DNS for <code>www.felinatechnology.com</code> to that host. Enable HTTPS.</p>
+            </div>
+
+            <div class="card">
+                <h1>Generate shareable link</h1>
+                <p class="small">Create a short share link to include in emails or messages. Choose the domain that should be used in the link.</p>
+
+                <label for="domainInput">Domain (use your public domain)</label>
+                <input id="domainInput" type="text" value="https://www.felinatechnology.com" />
+
+                <label style="margin-top:8px">Path or page</label>
+                <input id="pathInput" type="text" value="/" />
+
+                <div style="margin-top:12px" class="row">
+                    <button id="generateBtn">Generate link</button>
+                    <button id="copyBtn" class="btn-ghost" type="button">Copy</button>
+                    <button id="emailBtn" class="btn-ghost" type="button">Email</button>
+                </div>
+
+                <div style="margin-top:12px">
+                    <div id="linkOutput" class="link-output">No link yet — click Generate link</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h1>Options & token</h1>
+                <p class="small">Optionally include a simple token for tracking or one-time access. Tokens are generated client-side here — implement server-side tokens for production.</p>
+                <label>Token type</label>
+                <select id="tokenType">
+                    <option value="none">None</option>
+                    <option value="random">Random short token</option>
+                    <option value="timestamp">Timestamp token</option>
+                </select>
+
+                <label style="margin-top:10px">Expire (hours, optional)</label>
+                <input id="expireInput" type="text" placeholder="e.g. 24" />
+
+                <div style="margin-top:12px" class="muted">Note: For secure share links with expiration or single-use behavior, implement server-side storage and verification.</div>
+            </div>
+
+            <div class="card">
+                <h1>Quick actions</h1>
+                <p class="small">Utilities to test reachability and to copy or email the generated URL.</p>
+                <div style="margin-top:10px" class="row">
+                    <button id="checkPublic">Check Public Reachability</button>
+                    <button id="resetBtn" class="btn-ghost">Reset</button>
+                </div>
+                <div style="margin-top:12px" class="muted">When you click "Email" the default mail client opens with a prefilled subject and body so you can send from your company address (you must send from an @felinatechnology.com mailbox).</div>
+            </div>
+        </div>
+
+        <footer>
+            Last updated: <span id="lastUpdated">—</span>
+        </footer>
+    </div>
+
+    <script>
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const lastUpdated = document.getElementById('lastUpdated');
+        const domainInput = document.getElementById('domainInput');
+        const pathInput = document.getElementById('pathInput');
+        const tokenType = document.getElementById('tokenType');
+        const expireInput = document.getElementById('expireInput');
+        const linkOutput = document.getElementById('linkOutput');
+        const generateBtn = document.getElementById('generateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const emailBtn = document.getElementById('emailBtn');
+        const checkPublic = document.getElementById('checkPublic');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function updateStatus(online){
+            if(online){
+                statusDot.classList.remove('offline'); statusDot.classList.add('online');
+                statusText.textContent = 'Online (publicly reachable)';
+            } else {
+                statusDot.classList.remove('online'); statusDot.classList.add('offline');
+                statusText.textContent = 'Local (not publicly accessible)';
+            }
+            lastUpdated.textContent = new Date().toLocaleString();
+        }
+
+        // Basic public reachability check: attempt to fetch a small resource on the provided domain.
+        async function checkReachability(){
+            const d = domainInput.value.trim();
+            if(!d) return alert('Set the domain to check.');
+            try {
+                const probe = new URL(d);
+                const probeUrl = probe.origin + '/?healthcheck=1';
+                const controller = new AbortController();
+                const id = setTimeout(()=>controller.abort(), 3500);
+                const res = await fetch(probeUrl, {method:'HEAD', mode:'no-cors', signal: controller.signal});
+                clearTimeout(id);
+                // If fetch doesn't throw, assume reachable (mode no-cors will often succeed).
+                updateStatus(true);
+                alert('Domain appears reachable (quick check).');
+            } catch (err) {
+                updateStatus(false);
+                alert('Domain not reachable from this browser environment. Deploy and ensure DNS + firewall allow public requests.');
+            }
+        }
+
+        function makeToken(){
+            const t = tokenType.value;
+            if(t === 'none') return '';
+            if(t === 'timestamp') return Date.now().toString(36);
+            // random short token
+            return Math.random().toString(36).slice(2, 10);
+        }
+
+        function buildLink(){
+            const domain = domainInput.value.trim();
+            if(!domain) return '';
+            let path = pathInput.value.trim() || '/';
+            if(!path.startsWith('/')) path = '/' + path;
+            // ensure protocol
+            let normalized = domain;
+            if(!/^https?:\/\//i.test(normalized)) normalized = 'https://' + normalized;
+            const token = makeToken();
+            const expire = expireInput.value.trim();
+            const params = new URLSearchParams();
+            if(token) params.set('t', token);
+            if(expire) params.set('exp', expire);
+            const query = params.toString();
+            return normalized.replace(/\/$/,'') + path + (query ? '?' + query : '');
+        }
+
+        generateBtn.addEventListener('click', () => {
+            const link = buildLink();
+            if(!link) return alert('Please provide a valid domain (e.g. https://www.felinatechnology.com).');
+            linkOutput.textContent = link;
+        });
+
+        copyBtn.addEventListener('click', async () => {
+            const txt = linkOutput.textContent || '';
+            if(!txt || txt.startsWith('No link')) return alert('Generate a link first.');
+            try {
+                await navigator.clipboard.writeText(txt);
+                alert('Link copied to clipboard.');
+            } catch {
+                // fallback
+                const area = document.createElement('textarea');
+                area.value = txt;
+                document.body.appendChild(area);
+                area.select();
+                document.execCommand('copy');
+                area.remove();
+                alert('Link copied to clipboard (fallback).');
+            }
+        });
+
+        emailBtn.addEventListener('click', () => {
+            const link = linkOutput.textContent || '';
+            if(!link || link.startsWith('No link')) return alert('Generate a link first.');
+            // recipient can be set to a company address; sending will originate from user's configured SMTP/email client.
+            const recipient = 'support@felinatechnology.com';
+            const subject = encodeURIComponent('Access to Felina Technology');
+            const body = encodeURIComponent(
+`Hello,
+
+Please use the following link to access Felina Technology:
+
+${link}
+
+Note: Please send from your @felinatechnology.com address.
+
+Regards`
+            );
+            location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+        });
+
+        checkPublic.addEventListener('click', checkReachability);
+        resetBtn.addEventListener('click', () => {
+            domainInput.value = 'https://www.felinatechnology.com';
+            pathInput.value = '/';
+            tokenType.value = 'none';
+            expireInput.value = '';
+            linkOutput.textContent = 'No link yet — click Generate link';
+        });
+
+        // On load, mark status as local by default
+        updateStatus(false);
+    </script>
+</body>
+</html>
+<!-- ...existing code... -->
